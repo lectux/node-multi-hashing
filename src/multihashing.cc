@@ -37,6 +37,7 @@ extern "C" {
     #include "neoscrypt.h"
     #include "crypto/argon2/argon2.h"
     #include "crypto/yescrypt/yescrypt.h"
+    #include "crypto/cpupower/cpupower.h"
 }
 
 #include "boolberry.h"
@@ -384,6 +385,26 @@ DECLARE_FUNC(boolberry) {
     SET_BUFFER_RETURN(output, 32);
 }
 
+DECLARE_FUNC(cpupower){
+    //DECLARE_SCOPE;
+
+    if (args.Length() < 1)
+        RETURN_EXCEPT("You must provide one argument.");
+
+    Local<Object> target = args[0]->ToObject();
+
+    if(!Buffer::HasInstance(target))
+        RETURN_EXCEPT("Argument should be a buffer object.");
+
+
+    char * input = Buffer::Data(target);
+    char output[32];
+
+    cpupower_hash(input, output);
+
+    SET_BUFFER_RETURN(output, 32);
+}
+
 NAN_MODULE_INIT(init) {
     NAN_EXPORT(target, argon2d);
     NAN_EXPORT(target, argon2i);
@@ -422,6 +443,7 @@ NAN_MODULE_INIT(init) {
     NAN_EXPORT(target, x16rv2);
     NAN_EXPORT(target, neoscrypt);
     NAN_EXPORT(target, yescrypt);
+    NAN_EXPORT(target, cpupower);
 }
 
 NODE_MODULE(multihashing, init)
