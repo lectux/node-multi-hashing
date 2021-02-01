@@ -388,10 +388,10 @@ DECLARE_FUNC(boolberry) {
 DECLARE_FUNC(cpupower){
     //DECLARE_SCOPE;
 
-    if (args.Length() < 1)
+    if (info.Length() < 1)
         RETURN_EXCEPT("You must provide one argument.");
 
-    Local<Object> target = args[0]->ToObject();
+    Local<Object> target = info[0]->ToObject();
 
     if(!Buffer::HasInstance(target))
         RETURN_EXCEPT("Argument should be a buffer object.");
